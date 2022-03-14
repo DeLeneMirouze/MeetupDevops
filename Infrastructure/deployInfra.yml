@@ -1,0 +1,25 @@
+parameters:
+  environnement: ''
+  rgName: ''
+  location: ''
+
+
+jobs:
+  - deployment: deployment
+    displayName: Déploiement ${{parameters.environnement}} (${{parameters.location}})
+    environment: MeetupEnv
+    strategy: 
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+            
+          - template: TemplateRG.yml
+            parameters:
+              location: ${{parameters.location}}
+              rgName: ${{ parameters.rgName }}
+
+          - template: TemplateAppService.yml
+            parameters:
+              rgName: ${{ parameters.rgName }}
+              location: ${{parameters.location}}

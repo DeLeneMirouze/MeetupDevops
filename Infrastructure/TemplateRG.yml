@@ -1,0 +1,14 @@
+parameters:
+  rgName: ''
+  location: ''
+
+steps:           
+  - task: AzurePowerShell@5
+    displayName: Déploie le groupe de ressources ${{ parameters.rgName }}
+    inputs:
+      azureSubscription: 'MeetupSC'
+      azurePowerShellVersion: LatestVersion
+      ScriptType: 'InlineScript'
+      Inline: |
+          write-host "##[warning]Déployer: " ${{ parameters.rgName }} 
+          New-AzResourceGroup -Name ${{ parameters.rgName }}  -Location ${{parameters.location}} -Force

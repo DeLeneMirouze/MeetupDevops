@@ -1,0 +1,49 @@
+name: $(TeamProject)_$(Build.DefinitionName)_$(SourceBranchName)_$(Date:dd-MM-yyyy)$(Rev:.r)
+
+trigger: none
+  
+variables:
+  location: westeurope
+
+pool:
+  vmImage: windows-latest
+
+stages:
+  - stage: DEV
+    variables:
+      resourceGroupName: DEV_$(rgName)
+    jobs:
+      - job:
+        displayName: Déploiement DEV (${{variables.location}} )
+        steps:
+        - template: TemplateRG.yml
+          parameters:
+            location: ${{variables.location}}
+            rgName: $(resourceGroupName)
+            environnement: DEV
+        - template: TemplateAppService.yml
+          parameters:
+            rgName: $(resourceGroupName)
+            location: ${{variables.location}}
+
+  - stage: PROD_EU
+    variables:
+      resourceGroupName: PROD_EU_$(rgName)
+    dependsOn: [DEV]
+    jobs:
+    - template: deployInfra.yml
+      parameters:
+        location: ${{variables.location}}
+        rgName: $(resourceGroupName)
+        environnement: PROD
+
+  - stage: PROD_US
+    variables:
+      resourceGroupName: PROD_US_$(rgName)
+    dependsOn: [DEV]
+    jobs:
+    - template: deployInfra.yml
+      parameters:
+        location: westus
+        rgName: $(resourceGroupName)
+        environnement: PROD

@@ -1,0 +1,15 @@
+parameters:
+  rgName: ''
+  location: ''
+
+steps:
+  - task: AzurePowerShell@5
+    displayName: Déploie App Service
+    env:
+      DEPLOY_RGNAME: ${{ parameters.rgName }}
+      DEPLOY_LOCATION : ${{ parameters.location }}
+    inputs:
+      azureSubscription: 'MeetupSC'
+      azurePowerShellVersion: LatestVersion
+      ScriptType: 'FilePath'
+      ScriptPath: infrastructure/DeployAppService.ps1

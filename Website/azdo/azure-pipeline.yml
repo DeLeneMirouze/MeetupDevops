@@ -1,0 +1,83 @@
+name: $(TeamProject)_$(Build.DefinitionName)_$(SourceBranchName)_$(Date:dd-MM-yyyy)$(Rev:.r)
+
+trigger: none
+pool:
+  vmImage: windows-latest
+
+stages:
+  - stage: BUILD
+    jobs:
+      - job: BUILD
+        steps:
+        - task: UseDotNet@2
+          displayName: 'Use .NET Core sdk'
+          inputs:
+            version: '6.0.x'
+
+        - task: DotnetcoreCLI@2
+          inputs:
+            command: publish
+            publishWebProjects: true
+            arguments: '--output $(Build.BinariesDirectory)/output'
+            zipAfterPublish: true
+            modifyOutputPath: false
+
+        - publish: $(Build.BinariesDirectory)/output/output.zip
+          displayName: Publish Artifact
+          artifact: drop
+
+  - stage: DEV
+    jobs:
+      - job: DEV
+        variables:
+          - template: Variables-DEV.yml
+        steps:
+        - download: current 
+          displayName: Récupère l'artefact
+          artifact: drop
+
+        - task: AzureWebApp@1
+          displayName: Déploie le site
+          inputs:
+            azureSubscription: 'MeetupSC'
+            appType: 'webAppLinux'
+            appName: ${{ variables.rgName }}
+            package: '$(Agent.BuildDirectory)/drop/*.zip'
+
+  - stage: PROD_EU
+    dependsOn: [DEV]
+    jobs:
+      - job: PROD_EU
+        variables:
+          - template: Variables-PROD-EU.yml
+        steps:
+        - download: current 
+          displayName: Récupère l'artefact
+          artifact: drop
+
+        - task: AzureWebApp@1
+          displayName: Déploie le site
+          inputs:
+            azureSubscription: 'MeetupSC'
+            appType: 'webAppLinux'
+            appName: ${{ variables.rgName }}
+            package: '$(Agent.BuildDirectory)/drop/*.zip'
+
+  - stage: PROD_US
+    dependsOn: [DEV]
+    jobs:
+      - job: PROD_US
+        variables:
+          - template: Variables-PROD-US.yml
+        steps:
+        - download: current 
+          displayName: Récupère l'artefact
+          artifact: drop
+
+        - task: AzureWebApp@1
+          displayName: Déploie le site
+          inputs:
+            azureSubscription: 'MeetupSC'
+            appType: 'webAppLinux'
+            appName: ${{ variables.rgName }}
+            package: '$(Agent.BuildDirectory)/drop/*.zip'
