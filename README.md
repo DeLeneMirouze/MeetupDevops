@@ -7,3 +7,8 @@ déploiement de l'infra Azure: Groupe de ressource + App Service sur 3 environne
 - Déploiement du site web sur ces 3 infrastructure
 
 **NOTE**: Ces scripts ont été copiés depuis un autre repository structuré différemment. Il est donc possible que l'on aie besoin de modifier les chemins pour qu'ils fonctionnent.
+
+
+**Meetup**
+
+https://www.meetup.com/fr-FR/Azure-Nantes/events/284482413/
