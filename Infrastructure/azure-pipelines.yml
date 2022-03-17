@@ -11,39 +11,46 @@ pool:
 stages:
   - stage: DEV
     variables:
-      resourceGroupName: DEV_$(rgName)
+      environment: DEV
+      resourceGroupName: $(environment)_$(rgName)
+      region: $(location)
     jobs:
       - job:
-        displayName: Déploiement DEV (${{variables.location}} )
+        displayName: Déploiement $(environment) ($(location))
         steps:
         - template: TemplateRG.yml
           parameters:
-            location: ${{variables.location}}
+            location: $(region)
             rgName: $(resourceGroupName)
-            environnement: DEV
+            environnement: $(environment)
+
         - template: TemplateAppService.yml
           parameters:
             rgName: $(resourceGroupName)
-            location: ${{variables.location}}
+            location: $(region)
 
   - stage: PROD_EU
     variables:
-      resourceGroupName: PROD_EU_$(rgName)
+      environment: PROD_EU
+      resourceGroupName: $(environment)_$(rgName)
+      region: $(location)
     dependsOn: [DEV]
     jobs:
     - template: deployInfra.yml
       parameters:
-        location: ${{variables.location}}
+        location: $(region)
         rgName: $(resourceGroupName)
-        environnement: PROD
+        environnement: $(environment)
 
   - stage: PROD_US
     variables:
-      resourceGroupName: PROD_US_$(rgName)
+      environment: PROD_US
+      resourceGroupName: $(environment)_$(rgName)
+      region: westus
     dependsOn: [DEV]
     jobs:
     - template: deployInfra.yml
       parameters:
-        location: westus
+        location: $(region)
         rgName: $(resourceGroupName)
-        environnement: PROD
+        environnement: $(environment)
