@@ -13,6 +13,6 @@ déploiement de l'infra Azure: Groupe de ressource + App Service sur 3 environne
 
 https://www.meetup.com/fr-FR/Azure-Nantes/events/284482413/
 
-Lien vers Github:
+**Lien vers Github**
 
 ![image](https://user-images.githubusercontent.com/5559134/159092310-7f6ee2fc-8cd0-4e51-a712-19c6d16bb1ec.png)
