@@ -16,3 +16,10 @@ https://www.meetup.com/fr-FR/Azure-Nantes/events/284482413/
 **Lien vers Github**
 
 ![image](https://user-images.githubusercontent.com/5559134/159092310-7f6ee2fc-8cd0-4e51-a712-19c6d16bb1ec.png)
+
+**Cours UDEMY: Les pipelines Azure Devops Yaml**
+
+Coupon gratuit valable jusqu'au: 
+7319108E80AD8F35AB1D
+
+https://www.udemy.com/course/maitrisez-le-pipeline-yaml-azure-devops/?couponCode=7319108E80AD8F35AB1D
